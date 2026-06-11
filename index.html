@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>DYFM · 人生发现之旅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #F9F3E6 0%, #FFF4E8 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 主容器 */
+        .app-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 248, 235, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 48px 32px 48px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* 页面通用内边距 */
+        .page {
+            padding: 32px 24px 40px;
+        }
+
+        /* 首页 */
+        .home-page {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #E67E22, #D35400);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            margin-top: 20px;
+        }
+
+        .sub {
+            font-size: 1rem;
+            color: #B95A1A;
+            background: #FFE2C9;
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-weight: 500;
+        }
+
+        .start-btn {
+            background: #F39C12;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            padding: 16px 32px;
+            width: 80%;
+            border-radius: 80px;
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        .start-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 12px rgba(243, 156, 18, 0.4);
+        }
+
+        /* 测试区 */
+        .quiz-page, .result-page {
+            display: none;
+        }
+
+        .progress-area {
+            margin-bottom: 24px;
+        }
+
+        .progress-bar-bg {
+            background: #F1D5B5;
+            border-radius: 40px;
+            height: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #E67E22;
+            width: 0%;
+            height: 100%;
+            border-radius: 40px;
+            transition: width 0.25s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #A75818;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 1.55rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin: 20px 0 28px 0;
+            color: #2D2A24;
+            background: #FFF3E6;
+            padding: 16px 18px;
+            border-radius: 28px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .option-item {
+            background: #FFFFFFE6;
+            border: 1.5px solid #FFDDBB;
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #4A3A28;
+            font-weight: 500;
+            transition: all 0.15s;
+            cursor: pointer;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .option-item.selected {
+            background: #FEE2B5;
+            border-color: #E67E22;
+            color: #A14500;
+            box-shadow: 0 6px 12px rgba(230, 126, 34, 0.2);
+            transform: scale(1.01);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: #F7E5D3;
+            border: none;
+            padding: 14px 0;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #B7631A;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.primary {
+            background: #E67E22;
+            color: white;
+            box-shadow: 0 4px 8px rgba(230,126,34,0.2);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 结果页 */
+        .result-card {
+            text-align: center;
+        }
+
+        .type-badge {
+            font-size: 3rem;
+            font-weight: 800;
+            background: #FFEAD2;
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 80px;
+            margin: 10px 0 12px;
+        }
+
+        .type-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #CC6D1C;
+            margin: 12px 0 6px;
+        }
+
+        .major-area {
+            background: #FFF1E2;
+            padding: 18px;
+            border-radius: 32px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .major-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #BF5E17;
+            margin-bottom: 12px;
+        }
+
+        .major-list {
+            font-size: 1rem;
+            color: #624C38;
+            line-height: 1.45;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .major-list span {
+            background: white;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        .dimension-bar {
+            margin: 20px 0 16px;
+        }
+
+        .dim-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .dim-label {
+            width: 90px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #785E42;
+        }
+
+        .bar-bg {
+            flex: 1;
+            background: #F0DECC;
+            border-radius: 30px;
+            height: 28px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #F7B05E;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: #4D2F12;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .dim-score {
+            min-width: 45px;
+            text-align: right;
+            font-weight: 600;
+            color: #AD6B35;
+        }
+
+        .remark {
+            text-align: right;
+            font-size: 0.7rem;
+            color: #C29367;
+            margin-top: 24px;
+            border-top: 1px dashed #FFD7B5;
+            padding-top: 16px;
+        }
+
+        .retake-btn {
+            background: #EDB87A;
+            border: none;
+            color: #3E2C1C;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 14px 20px;
+            border-radius: 60px;
+            width: 100%;
+            margin-top: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .retake-btn:active {
+            background: #E4A455;
+        }
+
+        footer {
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 16px;
+            color: #DBAE7C;
+        }
+
+        @media (max-width: 500px) {
+            .page {
+                padding: 24px 18px 30px;
+            }
+            .question-text {
+                font-size: 1.3rem;
+            }
+            .option-item {
+                padding: 12px 16px;
+                font-size: 0.92rem;
+            }
+            .dim-label {
+                width: 75px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- 首页 -->
+    <div id="homePage" class="page home-page">
+        <div class="title">DYFM</div>
+        <div style="font-size: 1.3rem; font-weight: 500; color: #C25E1A;">✨ 发现你的人生 ✨</div>
+        <div class="sub">25道灵魂拷问 · 解锁天赋密码</div>
+        <button class="start-btn" id="startBtn">🎯 开始探索</button>
+        <footer style="margin-top: 30px;">✨ 凭直觉选，越纠结越不准 ✨</footer>
+    </div>
+
+    <!-- 测试页 -->
+    <div id="quizPage" class="page quiz-page">
+        <div class="progress-area">
+            <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text"><span>🏄‍♂️ 解锁进度</span><span id="questionCounter">第1 / 25题</span></div>
+        </div>
+        <div class="question-text" id="questionText">加载中...</div>
+        <div class="options-list" id="optionsContainer"></div>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn">◀ 上一题</button>
+            <button class="nav-btn primary" id="nextBtn">下一题 ▶</button>
+        </div>
+    </div>
+
+    <!-- 结果页 -->
+    <div id="resultPage" class="page result-page">
+        <div class="result-card">
+            <div class="type-badge" id="resultCode">🧠</div>
+            <div class="type-name" id="resultName">脑洞型</div>
+            <div class="major-area">
+                <div class="major-title">📚 适合专业（玄学匹配版）</div>
+                <div class="major-list" id="majorList">计算机科学 · 物理学 · 数据科学</div>
+            </div>
+            <div class="dimension-bar" id="dimensionBars"></div>
+            <button class="retake-btn" id="retakeBtn">🔄 重新测试</button>
+            <div class="remark">⚠️ 仅供参考 · 你的人生你说了算</div>
+        </div>
+        <footer>💡 如果平局，说明你是双修天才，选第一个推荐也很香</footer>
+    </div>
+</div>
+
+<script>
+    // ---------- 25道题完整题库 (基于灵魂25问) ----------
+    const QUESTIONS = [
+        { text: "周末早上醒来，你第一反应是？", options: ["A. 打开B站看硬核科普，研究“为什么薯片袋里要充氮气” 🧠", "B. 拿起手机拍窗外光影，调个复古滤镜发朋友圈 🎨", "C. 给爸妈发消息：“吃早饭没？今天降温多穿点” 👥", "D. 盘算怎么把昨晚的二手交易谈高20块 💼", "E. 直接去修那台嗡嗡响的风扇，拆开再说 🔧"] },
+        { text: "在博物馆里，你会在哪个展区停留最久？", options: ["A. 古代科技与天文仪器展（浑天仪、水运仪象台）🧠", "B. 印象派油画或书法真迹区 🎨", "C. 民俗文化展，看不同民族的婚嫁服饰 👥", "D. 钱币与贸易史展，思考汇率变迁 💼", "E. 古代兵器与农具展，研究锻造工艺 🔧"] },
+        { text: "小组作业最令你兴奋的角色是？", options: ["A. 数据分析和模型搭建，用Python跑个酷炫图表 🧠", "B. 做PPT视觉美化，把丑表格变成艺术展 🎨", "C. 协调组员时间，帮闹矛盾的两人和好 👥", "D. 最终答辩汇报，把老师讲得一愣一愣 💼", "E. 负责实物制作或实验操作，亲手搞定硬件 🔧"] },
+        { text: "看到路边有共享单车倒了，你会：", options: ["A. 分析它倒下的力学角度和地砖倾斜率 🧠", "B. 拍一张“孤独的单车”发小红书配文emo 🎨", "C. 立刻扶起来，顺便检查有没有砸到人 👥", "D. 扫码骑走并计算这单能攒多少优惠券 💼", "E. 掏出工具把松动的脚蹬拧紧 🔧"] },
+        { text: "你更羡慕以下哪种人？", options: ["A. 发现新元素命名的化学家 🧠", "B. 拿奥斯卡最佳导演的电影人 🎨", "C. 无国界医生在战地救死扶伤 👥", "D. 32岁公司上市，敲钟那天穿着拖鞋 💼", "E. 修复敦煌壁画的文物匠人 🔧"] },
+        { text: "如果参加综艺，你会选哪一类？", options: ["A. 《最强大脑》——挑战心算或记忆 🧠", "B. 《全员加速中》——cosplay跑酷加即兴表演 🎨", "C. 《忘不了餐厅》——陪阿尔茨海默老人聊天 👥", "D. 《令人心动的offer》——职场斗争拿第一名 💼", "E. 《梦想改造家》——亲手改造奇葩户型 🔧"] },
+        { text: "你房间最乱的地方通常是？", options: ["A. 书桌——堆满半途而废的电路板和草稿纸 🧠", "B. 衣柜——衣服按色系排好但永远找不到想穿的 🎨", "C. 床头——贴着家人朋友的照片和便利贴 👥", "D. 抽屉——塞着各种发票、会员卡和理财笔记 💼", "E. 工具箱——螺丝刀、扳手、胶枪整齐排列 🔧"] },
+        { text: "你刷短视频时，容易被什么内容吸引？", options: ["A. “3分钟解释量子纠缠”硬核动画 🧠", "B. 画师用iPad画龙过程，最后一声龙吟 🎨", "C. 流浪猫救助组织的一天记录 👥", "D. “从摆地摊到年入百万”的真实采访 💼", "E. 手工耿类无用发明，但你看完就想动手 🔧"] },
+        { text: "如果送你一个长假，你会选择？", options: ["A. 参加极地科考队，观测冰川数据 🧠", "B. 去景德镇学做陶瓷，烧自己的作品 🎨", "C. 去山区小学当一个月支教老师 👥", "D. 报名商业大亨游学团，混企业家圈子 💼", "E. 到木工坊做一把鲁班锁 🔧"] },
+        { text: "面对一道复杂的数学压轴题，你的策略是？", options: ["A. 尝试用三种以上不同解法，并比较最优 🧠", "B. 把题目画成漫画分镜，用故事理解 🎨", "C. 和同桌讨论，你讲一步他讲一步 👥", "D. 直接跳过，反正高考看总分——战略性放弃 💼", "E. 一步步算到底，草稿纸比作业本还整齐 🔧"] },
+        { text: "你理想的死党聚会方式是？", options: ["A. 密室逃脱——选最高难度，解谜全靠逻辑 🧠", "B. 户外写生+野餐，每人画一幅风景 🎨", "C. 真心话大冒险，谁哭谁请奶茶 👥", "D. 玩现金流游戏或德州扑克，赌注是洗碗权 💼", "E. 一起去修车店体验换轮胎 🔧"] },
+        { text: "你认为什么技能最值得学？", options: ["A. 编程——以后什么工作都可能需要 🧠", "B. 摄影与剪辑——记录生活本身就是艺术 🎨", "C. 心理学——一眼看穿别人是否在撒谎 👥", "D. 谈判与演讲——搞定客户和老板全靠它 💼", "E. 电工或木工——家里坏了不求人 🔧"] },
+        { text: "听一首新歌时，你会更注意？", options: ["A. 和弦进行是否符合乐理，节奏型怎么编的 🧠", "B. 歌词是不是一句诗，MV色调好不好看 🎨", "C. 歌手在唱什么情感故事，是不是在emo 👥", "D. 这首歌能不能火，有没有带货潜力 💼", "E. 吉他riff怎么弹，想扒谱自己录一版 🔧"] },
+        { text: "被老师批评后，你的第一反应往往是？", options: ["A. 复盘逻辑漏洞，思考“他哪里讲得不对” 🧠", "B. 偷偷画一张老师的夸张肖像消气 🎨", "C. 委屈但会去道歉，怕老师伤心 👥", "D. 心里盘算“等我有钱了请他来我公司上班” 💼", "E. 沉默，然后花一下午擦干净全班黑板 🔧"] },
+        { text: "你觉得最酷的职业是什么？", options: ["A. 航天工程师——设计火星车 🧠", "B. 独立游戏制作人——一个人搞定美术剧情 🎨", "C. 临终关怀师——陪人走完最后一程 👥", "D. 风险投资人——用钱砸出下一个字节跳动 💼", "E. 非遗技艺传承人——比如龙鳞装裱 🔧"] },
+        { text: "如果让你设计一款APP，你会侧重？", options: ["A. 算法精准推荐，能预测你下一分钟想什么 🧠", "B. 界面美到爆炸，每个图标都是艺术品 🎨", "C. 老年人极简模式，字体大且一键呼叫子女 👥", "D. 内置虚拟币任务系统，看广告赚钱 💼", "E. 拍立得风格滤镜+真实物理相机模拟 🔧"] },
+        { text: "你家里的植物死了，你会？", options: ["A. 解剖根系，显微镜下查是不是线虫感染 🧠", "B. 画一幅《枯荣》并配诗发小红书 🎨", "C. 难过三天，给它办个迷你葬礼 👥", "D. 查市场价格，下次买抗造的多肉 💼", "E. 把花盆洗干净，改成螺丝收纳盒 🔧"] },
+        { text: "你更害怕以下哪种情况？", options: ["A. 逻辑被证明完全错误，多年理论崩塌 🧠", "B. 作品被人说“丑到辣眼睛” 🎨", "C. 朋友出事而你没能帮上忙 👥", "D. 错过一个能赚大钱的风口 💼", "E. 工具生锈、零件缺失，活干到一半卡住 🔧"] },
+        { text: "哪种广告最能打动你？", options: ["A. 用数据说话：“这款牙膏抑菌率99.99%” 🧠", "B. 艺术短片：一个女孩跳舞，裙子变成星空 🎨", "C. 公益类：每买一瓶水就为缺水地区捐一元 👥", "D. 商业类：“前100名下单送股权代金券” 💼", "E. 实操类：主持人现场拆解产品，展示内部结构 🔧"] },
+        { text: "你在游乐园会首选玩什么？", options: ["A. 迷宫——用最短路径算法走出来的成就感 🧠", "B. 旋转木马——选最梦幻的那匹拍照 🎨", "C. 碰碰车——不是撞人，是去帮被撞哭的小孩 👥", "D. 摊位游戏——花10元赢回超大玩偶转卖 💼", "E. 攀岩墙——研究如何用摩擦力和重心上去 🔧"] },
+        { text: "如果回到古代，你最可能成为？", options: ["A. 钦天监——夜观星象，编历法 🧠", "B. 宫廷画师——给贵妃画肖像 🎨", "C. 江湖郎中——走街串巷治疑难杂症 👥", "D. 大商人——盐铁茶马，富可敌国 💼", "E. 墨家机关师——造木鸢、连弩车 🔧"] },
+        { text: "你对自己未来的住房要求是？", options: ["A. 必须有书房装满科学仪器和3D打印机 🧠", "B. 要有落地窗和大白墙，方便投影画画 🎨", "C. 离医院、学校、菜市场近，方便照顾家人 👥", "D. 小区必须高端，邻居都是人脉资源 💼", "E. 带个工具间，能放车床和电焊台 🔧"] },
+        { text: "别人评价你“不切实际”时，你一般是因为？", options: ["A. 沉迷证明哥德巴赫猜想这种数学难题 🧠", "B. 花三个月写一本没人看的奇幻小说 🎨", "C. 想收养全小区的流浪猫狗 👥", "D. 认为“只要给我一个支点，就能撬动地球”的商业计划 💼", "E. 试图手工造一辆能开的蒸汽朋克车 🔧"] },
+        { text: "你更愿意看哪类纪录片？", options: ["A. 《宇宙时空之旅》讲黑洞和熵增 🧠", "B. 《抽象：设计的艺术》讲设计师脑回路 🎨", "C. 《人间世》医院里的生老病死 👥", "D. 《美国工厂》劳资博弈与全球化 💼", "E. 《我在故宫修文物》修复钟表铜器 🔧"] },
+        { text: "高考后你最想做什么？", options: ["A. 自学一门新语言比如Rust或Swift 🧠", "B. 染个粉头发，去大理旅拍 🎨", "C. 去养老院做一周义工，听老人讲故事 👥", "D. 摆摊卖冰粉，研究怎么定价净赚最多 💼", "E. 把家里老自行车翻新，喷漆改造成复古款 🔧"] }
+    ];
+
+    // 类型映射数据库
+    const TYPE_META = [
+        { code: "🧠 脑洞型", name: "行走的十万个为什么", majors: "计算机科学与技术 · 物理学/数学 · 电子信息工程 · 数据科学", dimensionKey: "brain" },
+        { code: "🎨 浪漫型", name: "人形美颜滤镜", majors: "设计学类 · 戏剧影视文学 · 美术学 · 广告学", dimensionKey: "art" },
+        { code: "👥 老妈子型", name: "行走的暖宝宝", majors: "临床医学/护理学 · 心理学 · 学前教育 · 社会学", dimensionKey: "care" },
+        { code: "💼 老板型", name: "未来的PPT画饼大师", majors: "金融学 · 工商管理 · 法学 · 跨境电商", dimensionKey: "boss" },
+        { code: "🔧 工匠型", name: "手比脑子快的老实人", majors: "机械工程 · 土木工程 · 自动化 · 食品科学与工程", dimensionKey: "craft" }
+    ];
+
+    // 全局状态
+    let answers = new Array(25).fill(null);     // 存储每道题选的选项索引 (0~4)
+    let currentIndex = 0;
+    let totalQuestions = 25;
+
+    // DOM 元素
+    const homePage = document.getElementById('homePage');
+    const quizPage = document.getElementById('quizPage');
+    const resultPage = document.getElementById('resultPage');
+    const startBtn = document.getElementById('startBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const retakeBtn = document.getElementById('retakeBtn');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressFill = document.getElementById('progressFill');
+    const questionCounterSpan = document.getElementById('questionCounter');
+
+    // 根据所有答案计算每个维度的总分
+    function computeScores() {
+        let scores = [0, 0, 0, 0, 0]; // 脑洞,浪漫,老妈子,老板,工匠
+        for (let i = 0; i < totalQuestions; i++) {
+            const ans = answers[i];
+            if (ans !== null && ans >= 0 && ans <= 4) {
+                scores[ans] += 1;
+            }
+        }
+        return { brain: scores[0], art: scores[1], care: scores[2], boss: scores[3], craft: scores[4] };
+    }
+
+    // 获取主导类型 (处理平局: 返回第一个最高分的类型对象)
+    function getDominantType() {
+        const scores = computeScores();
+        const mapping = [
+            { key: "brain", score: scores.brain, meta: TYPE_META[0] },
+            { key: "art", score: scores.art, meta: TYPE_META[1] },
+            { key: "care", score: scores.care, meta: TYPE_META[2] },
+            { key: "boss", score: scores.boss, meta: TYPE_META[3] },
+            { key: "craft", score: scores.craft, meta: TYPE_META[4] }
+        ];
+        mapping.sort((a,b) => b.score - a.score);
+        const highestScore = mapping[0].score;
+        const topMatches = mapping.filter(m => m.score === highestScore);
+        // 平局时按顺序取第一个：脑洞>浪漫>老妈子>老板>工匠
+        if (topMatches.length > 1) {
+            const order = ["brain","art","care","boss","craft"];
+            for(let ord of order) {
+                const find = topMatches.find(m => m.key === ord);
+                if(find) return find.meta;
+            }
+        }
+        return mapping[0].meta;
+    }
+
+    // 渲染当前题目 (index)
+    function renderCurrentQuestion() {
+        const q = QUESTIONS[currentIndex];
+        if (!q) return;
+        questionText.innerText = `${currentIndex+1}. ${q.text}`;
+        // 渲染选项
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, idx) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-item';
+            if (answers[currentIndex] === idx) optionDiv.classList.add('selected');
+            optionDiv.innerText = opt;
+            optionDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // 更新答案数组
+                answers[currentIndex] = idx;
+                // 重新渲染当前题高亮
+                renderCurrentQuestion();
+                // 可选：自动保存到分数就够了
+            });
+            optionsContainer.appendChild(optionDiv);
+        });
+        // 更新进度条和计数
+        const progress = ((currentIndex + 1) / totalQuestions) * 100;
+        progressFill.style.width = `${progress}%`;
+        questionCounterSpan.innerText = `第${currentIndex+1} / ${totalQuestions}题`;
+        // 处理最后一题按钮文案
+        if (currentIndex === totalQuestions - 1) {
+            nextBtn.innerText = '✨ 查看结果 ✨';
+        } else {
+            nextBtn.innerText = '下一题 ▶';
+        }
+    }
+
+    // 跳转到指定题目（刷新渲染）
+    function goToQuestion(index) {
+        if (index < 0) index = 0;
+        if (index >= totalQuestions) index = totalQuestions - 1;
+        currentIndex = index;
+        renderCurrentQuestion();
+    }
+
+    // 下一题逻辑
+    function nextQuestion() {
+        // 检查是否已选本题答案，没选就温柔提醒但不强制，可以给个提示闪烁
+        if (answers[currentIndex] === null) {
+            // 简单震动高亮提醒用户
+            const opts = document.querySelectorAll('.option-item');
+            if(opts.length) opts[0].style.transform = 'scale(0.99)';
+            setTimeout(()=> {if(opts[0]) opts[0].style.transform = '';},200);
+            alert('✨ 凭心选一个吧，没有标准答案 ✨');
+            return;
+        }
+        if (currentIndex === totalQuestions - 1) {
+            // 最后一题，显示结果
+            showResult();
+        } else {
+            goToQuestion(currentIndex + 1);
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) {
+            goToQuestion(currentIndex - 1);
+        } else {
+            // 第一题，轻反馈
+            alert('🌱 已经在第一题啦，大胆向前！');
+        }
+    }
+
+    // 显示结果页面
+    function showResult() {
+        // 确保所有题都选了？可简单检查未答题提醒
+        const unanswered = answers.some(a => a === null);
+        if (unanswered) {
+            if(confirm('还有题目未作答，直接看结果会不准哦~ 要补完再揭秘吗？')) {
+                const firstNull = answers.findIndex(a => a === null);
+                if(firstNull !== -1) goToQuestion(firstNull);
+                return;
+            }
+        }
+        const dominant = getDominantType();
+        // 更新结果UI
+        document.getElementById('resultCode').innerHTML = dominant.code;
+        document.getElementById('resultName').innerText = dominant.name;
+        const majorsArray = dominant.majors.split('·').map(m => `<span>${m.trim()}</span>`).join('');
+        document.getElementById('majorList').innerHTML = majorsArray;
+        // 绘制维度对比条
+        const scores = computeScores();
+        const dims = [
+            { label: "🧠 脑洞型", score: scores.brain, max: 25, color: "#F7B05E" },
+            { label: "🎨 浪漫型", score: scores.art, max: 25, color: "#F7B05E" },
+            { label: "👥 老妈子型", score: scores.care, max: 25, color: "#F7B05E" },
+            { label: "💼 老板型", score: scores.boss, max: 25, color: "#F7B05E" },
+            { label: "🔧 工匠型", score: scores.craft, max: 25, color: "#F7B05E" }
+        ];
+        const barsHtml = dims.map(d => {
+            const percent = (d.score / d.max) * 100;
+            return `
+                <div class="dim-item">
+                    <div class="dim-label">${d.label}</div>
+                    <div class="bar-bg"><div class="bar-fill" style="width: ${percent}%; background: #F39C12;">${Math.round(percent)}%</div></div>
+                    <div class="dim-score">${d.score}</div>
+                </div>
+            `;
+        }).join('');
+        document.getElementById('dimensionBars').innerHTML = barsHtml;
+        // 切换页面
+        homePage.style.display = 'none';
+        quizPage.style.display = 'none';
+        resultPage.style.display = 'block';
+    }
+
+    // 重置所有数据并开始新测试
+    function resetAndStart() {
+        answers = new Array(25).fill(null);
+        currentIndex = 0;
+        homePage.style.display = 'none';
+        quizPage.style.display = 'block';
+        resultPage.style.display = 'none';
+        renderCurrentQuestion();
+    }
+
+    // 事件绑定
+    startBtn.addEventListener('click', () => {
+        resetAndStart();
+    });
+    nextBtn.addEventListener('click', nextQuestion);
+    prevBtn.addEventListener('click', prevQuestion);
+    retakeBtn.addEventListener('click', () => {
+        resetAndStart();
+    });
+
+    // 初始化状态 (确保首页可见)
+    homePage.style.display = 'flex';
+    quizPage.style.display = 'none';
+    resultPage.style.display = 'none';
+</script>
+</body>
+</html>
